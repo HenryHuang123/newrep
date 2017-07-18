@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Reply to Sender{% endblock %}
+
+{% block content %}
+<form action='{{ url_for("replyOne") }}' method = 'POST'>
+    <fieldset>
+    <p>
+        <input type="text" name="message_id" value = "{{ value }}" hidden=True>
+        
+    </p>
+    <p>
+        Message: <br>
+        <textarea rows="10"cols="40" type="text" name="message"></textarea></br>
+    </p>
+    <button type="submit">Enter</button>
+    
+    </fieldset>
+    
+</form>
+
+
+
+{% endblock %}

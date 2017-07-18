@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}To do list {% endblock %}
+
+{% block content %}
+{{ todostring|safe }}
+
+<form action="{{ url_for('todolist') }}" method="POST">
+    Description: <input type="text" name="description"/>
+    <button type="submit">Enter</button>
+    
+</form>
+
+<p><a href="/logout">Logout</a></p>
+
+{% endblock %}

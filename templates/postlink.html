@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Send Mail{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('sendmessage') }}" enctype ='multipart/form-data' method = "POST" style="background-color:white;">
+    {% if error %}
+    <p style="color:red">
+        {{ error }}
+        
+    </p>
+    {% endif %}
+    <fieldset>
+    <p>
+        Send to user: {{ multiselect|safe }}
+    </p>
+    <p>
+        Message:<br>
+        <textarea rows="10"cols="40" type="text" name="message"></textarea></br>
+    </p>
+    
+    <button type="submit">Enter</button>
+    </fieldset>
+    
+</form>
+<p>
+    Back to <a href="{{ url_for('welcome') }}">welcome page.</a>
+</p>
+{% endblock %}

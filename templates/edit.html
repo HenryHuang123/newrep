@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Edit To Do List {% endblock %}
+{% block content %}
+<form action="{{ url_for('edit') }}" method="POST" style="background-color:white;">
+    <fieldset>
+    <input type="text" name="messageid" value="{{ messageid }}" hidden = True />
+    <p>
+        Message: <input type="text" name="editedMessage" value="{{ originalMessage }}"/>
+    </p>
+    
+    <button type="submit">Enter</button>
+    </fieldset>
+    
+</form>
+{% endblock %}

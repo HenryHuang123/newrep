@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Sent Mail{% endblock %}
+
+{% block content %}
+    {{ sentmail|safe }}
+    
+    <p><a href="/">Back to mail</a></p>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}Welcome{%endblock%}
+
+{% block content %}
+
+<p>Welcome, {{ username }} - <a href="{{ url_for('logout') }}">Logout</a> - <a href="/todolist">To Do List</a></p>
+<p><a href="{{ url_for('sendmessage') }}">Send a message</a></p>
+
+<p>Your Messages:
+{{ table|safe }} 
+</p>
+<p>
+<a href="/sentmail">See your sent mail here.</a>
+</p>
+{% endblock %}
+
+
+
+
