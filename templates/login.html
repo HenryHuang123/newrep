@@ -2,15 +2,25 @@
 
 {% block title %}Login{% endblock %}
 
-{% block content %}
-{% if error %}
-    <p style="color:red">
-        {{ error }}
 
-    </p>
-{% endif %}
+
+{% block navigation %}
+<ul>
+    <li>
+    <a href=" {{ url_for('signin') }}">Sign in</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
 <form action='{{ url_for("login") }}' method = "POST" style="background-color:white;"> 
+        
     <fieldset>
+    {% if error %}
+    <p style="color:red">
+    {{ error }}
+    </p>
+    {% endif %}
     <p>
         Username: <input type="text" name="username"/>
     </p>
@@ -22,9 +32,6 @@
     </fieldset>
 </form>
 
-<p>
-    Don't have an account? <a href=" {{ url_for('signin') }}">Sign in</a> here.
-</p>
 
 {% endblock %}
 

@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 
 {% block title %}Send Mail{% endblock %}
-
+{% block navigation %}
+<ul>
+    <li>
+        <a href="{{ url_for('welcome') }}">Welcome Page</a>
+    </li>
+</ul>
+{% endblock %}
 {% block content %}
 <form action="{{ url_for('sendmessage') }}" enctype ='multipart/form-data' method = "POST" style="background-color:white;">
+    <fieldset>
     {% if error %}
     <p style="color:red">
-        {{ error }}
-        
+    {{ error }}
     </p>
     {% endif %}
-    <fieldset>
     <p>
         Send to user: {{ multiselect|safe }}
     </p>
@@ -23,7 +28,4 @@
     </fieldset>
     
 </form>
-<p>
-    Back to <a href="{{ url_for('welcome') }}">welcome page.</a>
-</p>
 {% endblock %}

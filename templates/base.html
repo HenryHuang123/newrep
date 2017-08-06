@@ -2,35 +2,122 @@
 <html>
     
 <head>
-    {% block head %}
-    <title>{% block title %}{% endblock %} - No, u!</title>
-    {% endblock%}
+    <style media="screen" type="text/css">
+    #body{
+        background-color: #EEE;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    
+    a {
+        text-decoration: none;
+        color: blue;
+    }
+
+    
+    
+    
+    #container{
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #header{
+        background-color: #66CCFF;
+        color: white;
+        text-align: center;
+    }
+    
+    #nav ul{
+        list-style-type: none;
+        padding: 0;
+    }
+    
+    h1, h2, h3{
+        margin: 0;
+    }
+    
+    #content{
+        padding: 10px;
+        display: table;
+    }
+    
+    #nav h4{
+        color: white;
+        font-size: 25px;
+    }
+    
+    table{
+	    width: 100%;
+	    overflow-y: auto;
+	    overflow: auto;
+	    margin: 0 0 1em;
+    }
+    
+    #nav{
+        text-align: center;
+        display: table-cell;
+        background-color: #666699;
+        width: 1%;
+        vertical-align: top;
+
+        
+    }
+    #main{
+        padding: 5px;
+        display: table-cell;
+        width: 10%;
+        background-color: #00e6e6;
+
+    }
+    #footer{
+        clear:both;
+        padding: 10px;
+        background-color: #999999;
+        color: white;
+        text-align: center;
+        width: 100%;
+    }
+    #nav.selected{
+        font-weight: bold;
+    }
+
+    </style>
 </head>
 
 <body>
-    <body style="background-color:lightgrey;"/>
-    <div id='logo'>
-        <img src=" {{ url_for('static', filename = 'no u.jpg') }}" alt = 'NO U' height = '200px' />
-    </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class='flashes'>
-        {% for message in messages %}
-        <li >{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+    <div id='container'>
+        <div id="header">
+            <h1>{% block title %}{% endblock %}</h1>
+        </div>  
+        <div id='content'>
+            <div id="nav">
+                <h4>Navigation</h4>
+                {% block navigation %}{% endblock%}
+            </div>
+            <div id='main'>
+                <div id='logo'>
+                    <img src=" {{ url_for('static', filename = 'nou.png') }}" alt = 'NO U' height = '200px' />
+                </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul class='flashes'>
+                    {% for message in messages %}
+                    <li >{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
 
-    <div id='content'>
-        {% block content %}{% endblock %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <div id="footer">
+            <footer>
+                {%block footer%}
+                &copy; Copyright 2017 by <a href='dsjfidsjficjxkckckcckckkk'>not a real website</a>
+                {%endblock%}
+            </footer>
+        </div>
     </div>
-    
-    <footer>
-        {%block footer%}
-        &copy; Copyright 2017 by <a href='dsjfidsjficjxkckckcckckkk'>not a real website</a>
-        {%endblock%}
-    </footer>
     
 </body>
 

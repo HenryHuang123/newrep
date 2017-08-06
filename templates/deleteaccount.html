@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<form action="/deleteaccount" enctype ='multipart/form-data' method = "POST" style="background-color:white;">
+    <fieldset>
+        {% if error %}
+        <p style="color:red">
+        {{ error }}
+        </p>
+        {% endif %}
+        <p>
+            Delete users: {{ multiselect|safe }}
+        </p>
+        
+        <button type="submit">Delete</button>
+        
+    </fieldset>
+
+
+{% endblock %}
