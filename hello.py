@@ -38,9 +38,9 @@ def invite():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -73,9 +73,9 @@ def login():
 
 @app.route('/deleteaccount', methods=["GET", "POST"])
 def delete_account():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -110,9 +110,9 @@ def logout():
     
 @app.route('/deleteMail')
 def deleteMail():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -131,9 +131,9 @@ def deleteMail():
     
 @app.route('/', methods=["GET","POST"])
 def welcome():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -188,9 +188,9 @@ def html_table(info):
     
 def validLogin(username, password):
     invalid_character_array = ["{", "[", "}", "]", "-", "_", "=", "+", "~", "`", " ", "'", "\""]
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -227,9 +227,9 @@ def signin():
             error = "Invalid character in password!"
         else:
             if request.form.get('password') == request.form.get('confirm') and request.form.get('username') != '' and request.form.get('password') != '' and 64 >= len(request.form.get('username')) >= 6 and 64 >= len(request.form.get('password')) >= 6:
-                MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+                MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
                 MYSQL_DATABASE_USER = 'huanghenry'
-                MYSQL_DATABASE_PASSWORD = ''
+                MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
                 MYSQL_DATABASE_DB = 'my_flask_app'
     
                 conn = pymysql.connect(
@@ -261,9 +261,9 @@ def signin():
     
 @app.route('/sendmessage', methods=["GET", "POST"])
 def sendmessage():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -313,9 +313,9 @@ def sendmessage():
 @app.route('/sentmail')
 def sentmail():
     if 'username' in session:
-        MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+        MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
         MYSQL_DATABASE_USER = 'huanghenry'
-        MYSQL_DATABASE_PASSWORD = ''
+        MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
         MYSQL_DATABASE_DB = 'my_flask_app'
     
         conn = pymysql.connect(
@@ -364,9 +364,9 @@ def sentmail():
         return redirect('/login')
     
 def databaseURL(message, user, sendingUser):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -391,9 +391,9 @@ def databaseURL(message, user, sendingUser):
         
         
 def convert_multi_select():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -415,9 +415,9 @@ def convert_multi_select():
     
     
 def convert_multi_select_reply(messageid):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -483,9 +483,9 @@ def todolist():
         
         
 def takeFromTodolist(user):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -505,9 +505,9 @@ def takeFromTodolist(user):
     return string
         
 def putInTodolist(user, to_do):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -523,9 +523,9 @@ def putInTodolist(user, to_do):
     return None
     
 def deleteTodolist(id):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -550,9 +550,9 @@ def delete():
         
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -577,9 +577,9 @@ def replyOne():
         
         
 def editFinder(id):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '0.0.0.0')
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = ''
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
     MYSQL_DATABASE_DB = 'my_flask_app'
     
     conn = pymysql.connect(
@@ -596,7 +596,7 @@ def editFinder(id):
     
 if __name__ == '__main__':
     host=os.getenv('IP', '0.0.0.0')
-    port = int(os.getenv('PORT', 5000))
+    port = int(os.getenv('PORT', 8080))
     app.debug = True
     app.secret_key = 'PBN\xbb\xae"\xe7\xc6\x98\xe2w\x0fB\xa3\x1e\xa0\x1d6(\xda:Kq\xd7'
     #logging
