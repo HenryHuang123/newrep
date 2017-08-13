@@ -235,7 +235,7 @@ def signin():
                     )   
     
                 cursor = conn.cursor()
-                cursor.execute("INSERT INTO user VALUES('', '%s', '%s');" % (request.form.get('username'), request.form.get('password')))
+                cursor.execute("INSERT INTO user(username, password) VALUES(%s', '%s');" % (request.form.get('username'), request.form.get('password')))
                 conn.commit()
                 session['username']=request.form.get('username')
                 return redirect(url_for('welcome'))
@@ -280,7 +280,7 @@ def sendmessage():
                 inputstring = inputstring.replace("'", "\\'")
                 inputstring = inputstring.replace('"', '\\"')
                 print(inputstring)
-                cursor.execute('INSERT INTO messages VALUES("", "%s", "%s")' % (inputstring, string))
+                cursor.execute('INSERT INTO messages(message, datetime) VALUES("%s", "%s")' % (inputstring, string))
                 conn.commit()
                 for i in range(0, len(info)):
                     databaseURL(request.form.get('message'), info[i], session['username'])
@@ -344,7 +344,7 @@ def databaseURL(message, user, sendingUser):
     message = message.replace('"', '\\"')
     cursor.execute('SELECT message_id FROM messages WHERE message="%s"'%(message))
     number = cursor.fetchall()[-1]
-    cursor.execute('INSERT INTO messagesid VALUES("%s", "%s", "%s")'%(sendingUser, user, number[0]))
+    cursor.execute('INSERT INTO messagesid(sending_user, to_user, message_id) VALUES("%s", "%s", "%s")'%(sendingUser, user, number[0]))
     conn.commit()
     return error
     
@@ -431,7 +431,7 @@ def takeFromTodolist(user):
         
 def putInTodolist(user, to_do):
     cursor, conn = cursorcreate()
-    cursor.execute("INSERT INTO todolist VALUES('', '%s', '%s')"%(user,to_do))
+    cursor.execute("INSERT INTO todolist(to_do_user, to_do_list) VALUES('%s', '%s')"%(user,to_do))
     conn.commit()
     return None
     

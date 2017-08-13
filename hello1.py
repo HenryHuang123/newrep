@@ -93,7 +93,7 @@ def apisendmessage():
         string = string.replace('T', ' ')
         string = string.split('.')[0]
         print(message + ' ' + string + ' ' + str(sentto))
-        cursor.execute('INSERT INTO messages(message_id, message, datetime) VALUES ("", "%s", "%s")' % (message, string))
+        cursor.execute('INSERT INTO messages(message, datetime) VALUES ("%s", "%s")' % (message, string))
         conn.commit()
         
         cursor.execute('SELECT * FROM messages WHERE datetime="%s" AND message="%s"' % (string, message))
@@ -285,7 +285,7 @@ def signin():
         else:
             if request.form.get('password') == request.form.get('confirm') and request.form.get('username') != '' and request.form.get('password') != '' and 64 >= len(request.form.get('username')) >= 6 and 64 >= len(request.form.get('password')) >= 6:
                 cursor, conn = cursorcreate()
-                cursor.execute("INSERT INTO user(user_id, username, password) VALUES('', '%s', '%s');" % (request.form.get('username'), request.form.get('password')))
+                cursor.execute("INSERT INTO user(username, password) VALUES('%s', '%s');" % (request.form.get('username'), request.form.get('password')))
                 conn.commit()
                 USERS = {}
                 USERS['Account'] = {request.form.get('username'):[request.form.get('password'), get_auth_token()]}
@@ -332,7 +332,7 @@ def sendmessage():
                 inputstring = inputstring.replace("'", "\\'")
                 inputstring = inputstring.replace('"', '\\"')
                 print(inputstring)
-                cursor.execute('INSERT INTO messages(message_id, message, datetime) VALUES("", "%s", "%s")' % (inputstring, string))
+                cursor.execute('INSERT INTO messages(message, datetime) VALUES("%s", "%s")' % (inputstring, string))
                 conn.commit()
                 for i in range(0, len(info)):
                     databaseURL(request.form.get('message'), info[i], session['username'])
@@ -484,7 +484,7 @@ def takeFromTodolist(user):
         
 def putInTodolist(user, to_do):
     cursor, conn = cursorcreate()
-    cursor.execute("INSERT INTO todolist(to_do_id, to_do_user, to_do_string) VALUES('', '%s', '%s')"%(user,to_do))
+    cursor.execute("INSERT INTO todolist(to_do_user, to_do_string) VALUES('%s', '%s')"%(user,to_do))
     conn.commit()
     return None
     
