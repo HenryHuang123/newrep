@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+
+
+{% block navigation %}
+<ul>
+    <li>
+    <a href=" {{ url_for('signin') }}">Sign in</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<form action='{{ url_for("login") }}' method = "POST" style="background-color:white;"> 
+        
+    <fieldset>
+    {% if error %}
+    <p style="color:red">
+    {{ error }}
+    </p>
+    {% endif %}
+    <p>
+        Username: <input type="text" name="username"/>
+    </p>
+    <p>
+        Password: <input type="password" name ="password"/>
+    </p>
+    
+    <button type="submit">Login</button>
+    </fieldset>
+</form>
+
+
+{% endblock %}
+
+

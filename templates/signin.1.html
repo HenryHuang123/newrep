@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In {% endblock %}
+{%block navigation %}
+<ul>
+    <li><a href="/login">Login</a></li>
+</ul>
+{% endblock%}
+{% block content %}
+<form action='{{ url_for("signinjson") }}' method = "POST" style="background-color:white;">
+    <fieldset>
+    {% if error %}
+    <p style="color:red">
+    {{ error }}
+        
+    </p>
+    {% endif %}
+    <p>
+        Username: <input type="text" name="username"/>
+    </p>
+    <p>
+        Password: <input type="password" name="password"/>
+    </p>
+    <p>
+        Confirm password: <input type="password" name = "confirm"/>
+    </p>
+    
+    <button type="submit">Enter</button>
+    </fieldset>
+</form>
+
+
+{% endblock %}

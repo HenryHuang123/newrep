@@ -10,9 +10,46 @@ import smtplib
 from flask import Flask, url_for, request, render_template, redirect, flash, make_response, session
 import logging
 import pymysql
+import uuid
 from logging.handlers import RotatingFileHandler
 app = Flask(__name__)
 
+def get_auth_token():
+    return uuid.uuid4().hex
+
+
+@app.route('/deleteaccount', methods=["GET", "POST"])
+def delete_account():
+    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
+    MYSQL_DATABASE_USER = 'huanghenry'
+    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
+    MYSQL_DATABASE_DB = 'my_flask_app'
+    
+    conn = pymysql.connect(
+        host = MYSQL_DATABASE_HOST,
+        user = MYSQL_DATABASE_USER,
+        password = MYSQL_DATABASE_PASSWORD,
+        db = MYSQL_DATABASE_DB
+        )
+        
+    cursor = conn.cursor()
+    if 'admin' in session:
+        if request.method == "POST":
+            info = request.form.getlist('toUser')
+            for users in info:
+                cursor.execute('DELETE FROM user WHERE username="%s"' % (users))
+                conn.commit()
+                cursor.execute('DELETE FROM messagesid WHERE to_user="%s"' % (users))
+                conn.commit()
+                cursor.execute('DELETE FROM messagesid WHERE sending_user="%s"'%(users))
+                conn.commit()
+            flash("Succesfully deleted accounts!")
+            return redirect('/')
+        return render_template('deleteaccount.html', multiselect=convert_multi_select())
+    else:
+        return redirect("/")
+
+    
 @app.route('/invite', methods=['GET','POST'])
 def invite():
     if request.method == 'POST':
@@ -71,36 +108,6 @@ def login():
     return render_template('login.html', error=error)
 
 
-@app.route('/deleteaccount', methods=["GET", "POST"])
-def delete_account():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-        
-    cursor = conn.cursor()
-    if 'admin' in session:
-        if request.method == "POST":
-            info = request.form.getlist('toUser')
-            for users in info:
-                cursor.execute('DELETE FROM user WHERE username="%s"' % (users))
-                conn.commit()
-                cursor.execute('DELETE FROM messagesid WHERE to_user="%s"' % (users))
-                conn.commit()
-                cursor.execute('DELETE FROM messagesid WHERE sending_user="%s"'%(users))
-                conn.commit()
-            flash("Succesfully deleted accounts!")
-            return redirect('/')
-        return render_template('deleteaccount.html', multiselect=convert_multi_select())
-    else:
-        return redirect("/")
 
 
 @app.route('/logout')
@@ -129,22 +136,10 @@ def deleteMail():
     return redirect('/')
     
     
+    
 @app.route('/', methods=["GET","POST"])
 def welcome():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-        
-    cursor = conn.cursor()
-    
+    cursor, conn = cursorcreate()
     if 'username' in session:
         seconds = 30
         if request.method == "POST":
@@ -255,25 +250,13 @@ def signin():
                 error = "Password has to be between 6 and 64 characters!" 
             elif request.form.get('password') != request.form.get('confirm'):
                 error = "Passwords don't match."
-    return render_template('signin.html', error=error)
+    return render_template('signin.1.html', error=error)
     
     
     
 @app.route('/sendmessage', methods=["GET", "POST"])
 def sendmessage():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     error = None
     utc_now = pytz.utc.localize(datetime.datetime.utcnow())
     pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
@@ -313,17 +296,7 @@ def sendmessage():
 @app.route('/sentmail')
 def sentmail():
     if 'username' in session:
-        MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-        MYSQL_DATABASE_USER = 'huanghenry'
-        MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-        MYSQL_DATABASE_DB = 'my_flask_app'
-    
-        conn = pymysql.connect(
-            host = MYSQL_DATABASE_HOST,
-            user = MYSQL_DATABASE_USER,
-            password = MYSQL_DATABASE_PASSWORD,
-            db = MYSQL_DATABASE_DB
-            )
+        cursor, conn = cursorcreate()
         used=  []
         string = '<div id="table-wrapper"><div id="table-scroll"><table border="1", scrolling="yes", bordercolor="green">'
         string += '<tr><th>Date</th><th>Sent To</th><th>Message</th>'
@@ -364,19 +337,7 @@ def sentmail():
         return redirect('/login')
     
 def databaseURL(message, user, sendingUser):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     error = None
     message = message.replace('\\', '\\\\')
     message = message.replace("'", "\\'")
@@ -391,19 +352,7 @@ def databaseURL(message, user, sendingUser):
         
         
 def convert_multi_select():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     cursor.execute('SELECT username FROM user')
     data = cursor.fetchall()
     string = "<select multiple id='multiselect' name='toUser'>"
@@ -415,19 +364,7 @@ def convert_multi_select():
     
     
 def convert_multi_select_reply(messageid):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     cursor.execute('SELECT username FROM user')
     data = cursor.fetchall()
     string = "<select multiple id='multiselect' name='toUser'>"
@@ -483,19 +420,7 @@ def todolist():
         
         
 def takeFromTodolist(user):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     string = ''
     cursor.execute('SELECT * FROM todolist WHERE to_do_user ="%s"' % (user))
     data = cursor.fetchall()
@@ -505,37 +430,13 @@ def takeFromTodolist(user):
     return string
         
 def putInTodolist(user, to_do):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     cursor.execute("INSERT INTO todolist VALUES('', '%s', '%s')"%(user,to_do))
     conn.commit()
     return None
     
 def deleteTodolist(id):
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     
     cursor.execute("DELETE FROM todolist WHERE to_do_id = '%s'" % (id))
     conn.commit()
@@ -550,19 +451,7 @@ def delete():
         
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
-    MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-    MYSQL_DATABASE_USER = 'huanghenry'
-    MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-    MYSQL_DATABASE_DB = 'my_flask_app'
-    
-    conn = pymysql.connect(
-        host = MYSQL_DATABASE_HOST,
-        user = MYSQL_DATABASE_USER,
-        password = MYSQL_DATABASE_PASSWORD,
-        db = MYSQL_DATABASE_DB
-        )
-    
-    cursor = conn.cursor()
+    cursor, conn = cursorcreate()
     if request.method == "POST":
         cursor.execute("UPDATE todolist SET to_do_string='%s' WHERE to_do_id = '%s'" % (request.form.get('editedMessage'), request.form.get('messageid')))
         conn.commit()
@@ -577,6 +466,12 @@ def replyOne():
         
         
 def editFinder(id):
+    cursor, conn = cursorcreate()
+    cursor.execute('SELECT to_do_string FROM todolist WHERE to_do_id = "%s"' % (id))
+    data = cursor.fetchone()
+    return data
+    
+def cursorcreate():
     MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
     MYSQL_DATABASE_USER = 'huanghenry'
     MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
@@ -588,11 +483,9 @@ def editFinder(id):
         password = MYSQL_DATABASE_PASSWORD,
         db = MYSQL_DATABASE_DB
         )
-    
+        
     cursor = conn.cursor()
-    cursor.execute('SELECT to_do_string FROM todolist WHERE to_do_id = "%s"' % (id))
-    data = cursor.fetchone()
-    return data
+    return cursor, conn
     
 if __name__ == '__main__':
     host=os.getenv('IP', '0.0.0.0')
@@ -604,7 +497,3 @@ if __name__ == '__main__':
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     app.run(host=host, port=port)
-    
-    
-
-    
