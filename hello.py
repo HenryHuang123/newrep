@@ -222,20 +222,8 @@ def signin():
             error = "Invalid character in password!"
         else:
             if request.form.get('password') == request.form.get('confirm') and request.form.get('username') != '' and request.form.get('password') != '' and 64 >= len(request.form.get('username')) >= 6 and 64 >= len(request.form.get('password')) >= 6:
-                MYSQL_DATABASE_HOST = os.getenv('IP', '127.0.0.1')
-                MYSQL_DATABASE_USER = 'huanghenry'
-                MYSQL_DATABASE_PASSWORD = 'tab3le2U$'
-                MYSQL_DATABASE_DB = 'my_flask_app'
-    
-                conn = pymysql.connect(
-                    host = MYSQL_DATABASE_HOST,
-                    user = MYSQL_DATABASE_USER,
-                    password = MYSQL_DATABASE_PASSWORD,
-                    db = MYSQL_DATABASE_DB
-                    )   
-    
-                cursor = conn.cursor()
-                cursor.execute("INSERT INTO user(username, password) VALUES(%s', '%s');" % (request.form.get('username'), request.form.get('password')))
+                cursor, conn = cursorcreate()
+                cursor.execute("INSERT INTO user(username, password) VALUES('%s', '%s');" % (request.form.get('username'), request.form.get('password')))
                 conn.commit()
                 session['username']=request.form.get('username')
                 return redirect(url_for('welcome'))
