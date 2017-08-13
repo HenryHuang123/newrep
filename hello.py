@@ -250,7 +250,7 @@ def signin():
                 error = "Password has to be between 6 and 64 characters!" 
             elif request.form.get('password') != request.form.get('confirm'):
                 error = "Passwords don't match."
-    return render_template('signin.1.html', error=error)
+    return render_template('signin.html', error=error)
     
     
     
