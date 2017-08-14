@@ -30,10 +30,9 @@ parser.add_argument('message')
 
 @app.route('/api/token')
 def send_auth_token():
-    cursor, conn = cursorcreate()
-    args = parser.parse_args()
-    username = args['username']
-    password= args['password']
+    cursor,conn = cursorcreate()
+    username = request.values['username']
+    password= request.values['password']
     cursor.execute('SELECT * FROM user WHERE username="%s" AND password="%s"' % (username, password))
     data = cursor.fetchone()
     if data:
