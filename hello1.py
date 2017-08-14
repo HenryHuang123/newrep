@@ -38,9 +38,9 @@ def send_auth_token():
     data = cursor.fetchone()
     if data:
         
-        return jsonify({'token':generate_auth_token(data[0]).decode('ascii')})
+        return jsonify({'username':username, 'token':generate_auth_token(data[0]).decode('ascii')})
     else:
-        return "Login not found"
+        return jsonify({'error':'token not found'})
         
 @app.route('/api/getmessage')
 def getmessagesapi():
@@ -159,7 +159,7 @@ def login():
             if data:
                 USERS = {}
                 print('ha')
-                USERS['Account'] = {request.form.get('username'):[request.form.get('password'), get_auth_token()]}
+                USERS = {'username':request.form.get('username'), 'password':request.form.get('password'), 'token':get_auth_token()}
                 print('ha')
                 session['username']=request.form.get('username')
                 session['admin'] = True
@@ -167,7 +167,7 @@ def login():
                 return render_template('json.html', json=USERS) 
             else:
                 USERS = {}
-                USERS['Account'] = {request.form.get('username'):[request.form.get('password'), get_auth_token()]}
+                USERS = {'username':request.form.get('username'), 'password':request.form.get('password'), 'token':get_auth_token()}
                 session['username']=request.form.get('username')
                 return render_template('json.html', json=USERS) 
         else:
@@ -276,7 +276,8 @@ def validLogin(username, password):
 @app.route('/signin', methods = ["GET", "POST"])
 def signin():
     invalid_character_array = ["{", "[", "}", "]", "-", "_", "=", "+", "~", "`", " "]
-    error = None
+    error = None 
+    cursor, conn = cursorcreate()
     if request.method == "POST":
         if any(x in request.form.get('username') for x in invalid_character_array):
             error = "Invalid character in username!"
@@ -284,13 +285,17 @@ def signin():
             error = "Invalid character in password!"
         else:
             if request.form.get('password') == request.form.get('confirm') and request.form.get('username') != '' and request.form.get('password') != '' and 64 >= len(request.form.get('username')) >= 6 and 64 >= len(request.form.get('password')) >= 6:
-                cursor, conn = cursorcreate()
-                cursor.execute("INSERT INTO user(username, password) VALUES('%s', '%s');" % (request.form.get('username'), request.form.get('password')))
-                conn.commit()
-                USERS = {}
-                USERS['Account'] = {request.form.get('username'):[request.form.get('password'), get_auth_token()]}
-                session['username']=request.form.get('username')
-                return render_template('json.html', json=USERS)
+                cursor.execute('SELECT * FROM user WHERE username="%s"' % (request.form.get('username')))
+                data = cursor.fetchone()
+                if data:
+                    error = "Username taken"
+                else:
+                    cursor.execute("INSERT INTO user(username, password) VALUES('%s', '%s');" % (request.form.get('username'), request.form.get('password')))
+                    conn.commit()
+                    USERS = {}
+                    USERS = {'username': request.form.get('username'), 'password': request.form.get('password'), 'token':get_auth_token()}
+                    session['username']=request.form.get('username')
+                    return render_template('json.html', json=USERS)
             
             elif request.form.get('password') == '':
                 error = "Not a valid password."
@@ -337,7 +342,7 @@ def sendmessage():
                 for i in range(0, len(info)):
                     databaseURL(request.form.get('message'), info[i], session['username'])
                 MESSAGES = {}
-                MESSAGES['message'] = {'date, from, to, message':[string, session['username'], info, request.form.get('message')]}
+                MESSAGES = {'time':string, 'sender':session['username'], 'sent to':info, 'message':inputstring}
                 return render_template('json.html', json=MESSAGES)
             else:
                 error = "Not sending to a user!"
