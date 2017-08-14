@@ -40,7 +40,7 @@ def send_auth_token():
         
         return jsonify({'username':username, 'token':generate_auth_token(data[0]).decode('ascii')})
     else:
-        return jsonify({'error':'token not found'})
+        return jsonify({'error':'username and password not found'})
         
 @app.route('/api/getmessage')
 def getmessagesapi():
