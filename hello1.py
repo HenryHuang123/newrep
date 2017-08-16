@@ -62,7 +62,7 @@ def getmessagesapi():
         print(json)
         return jsonify(json)
     else:
-        return "Token not found."
+        return jsonify({"error":"token not found"})
     
         
 def verify_auth_token(token):
@@ -114,7 +114,7 @@ def get_resource():
     if verify_auth_token(token) != None:
         return jsonify({ 'data': '%s!' % verify_auth_token(token) })
     else:
-        return "Token not found."
+        return jsonify({"error": "token not found"})
         
 
 def generate_auth_token(id, expiration = 600):
