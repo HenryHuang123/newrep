@@ -113,7 +113,7 @@ def get_resource():
     args = parser.parse_args()
     token = args['token']
     if verify_auth_token(token) != None:
-        return jsonify({ 'data': 'Hello, %s!' % verify_auth_token(token) })
+        return jsonify({ 'data': '%s!' % verify_auth_token(token) })
     else:
         return "Token not found."
         
