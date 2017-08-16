@@ -45,7 +45,7 @@ def send_auth_token():
 def getmessagesapi():
     cursor, conn = cursorcreate()
     args = parser.parse_args()
-    username = verify_auth_token(args['token'])
+    username = verify_auth_token(request.values["token"])
     if username != None:
         json = {}
         cursor.execute('SELECT * FROM messagesid WHERE to_user = "%s"' % (username))
@@ -81,9 +81,9 @@ def verify_auth_token(token):
 def apisendmessage():
     cursor, conn = cursorcreate()
     args = parser.parse_args()
-    token = args['token']
-    sentto = args['sentto']
-    message = args['message']
+    token = request.values["token"]
+    sentto = request.values["sentto"]
+    message = request.values["message"]
     if verify_auth_token(token) != None:
         username = verify_auth_token(token)
         utc_now = pytz.utc.localize(datetime.datetime.utcnow())
@@ -110,8 +110,7 @@ def apisendmessage():
         
 @app.route('/api/resource')
 def get_resource():
-    args = parser.parse_args()
-    token = args['token']
+    token = request.values["token"]
     if verify_auth_token(token) != None:
         return jsonify({ 'data': '%s!' % verify_auth_token(token) })
     else:
