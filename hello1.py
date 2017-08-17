@@ -37,9 +37,9 @@ def send_auth_token():
     data = cursor.fetchone()
     if data:
         
-        return jsonify({'username':username, 'token':generate_auth_token(data[0]).decode('ascii')})
+        return jsonify({'usernamefillerfiller':username, 'token':generate_auth_token(data[0]).decode('ascii')})
     else:
-        return jsonify({'error':'username and password not found'})
+        return jsonify({'errorfillerfillerfiller':'username and password not found'})
         
 @app.route('/api/getmessage')
 def getmessagesapi():
@@ -47,7 +47,7 @@ def getmessagesapi():
     args = parser.parse_args()
     username = verify_auth_token(request.values["token"])
     if username != None:
-        json = {}
+        json = {'usernamefillerfiller':username}
         cursor.execute('SELECT * FROM messagesid WHERE to_user = "%s"' % (username))
         data = cursor.fetchall()
         for datapiece in data:
@@ -62,7 +62,7 @@ def getmessagesapi():
         print(json)
         return jsonify(json)
     else:
-        return jsonify({"error":"token not found"})
+        return jsonify({"errorfillerfillerfiller":"token not found"})
     
         
 def verify_auth_token(token):
@@ -114,7 +114,7 @@ def get_resource():
     if verify_auth_token(token) != None:
         return jsonify({ 'data': '%s!' % verify_auth_token(token) })
     else:
-        return jsonify({"error": "token not found"})
+        return jsonify({"errorfillerfillerfiller": "token not found"})
         
 
 def generate_auth_token(id, expiration = 600):
